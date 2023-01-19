@@ -47,9 +47,32 @@ def remove_classes_with_less_than_x_percent(data, label_col = "BIKESTYLE", perce
 
 # code for tests
 
-# import data
-#data = pd.read_csv(Path("../BIKED_reduced.csv"), index_col=0)
-#data.shape #reduced dataset: (4512, 1320)
+import pandas as pd
+from pathlib import Path
+from sklearn.model_selection import train_test_split
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+data = pd.read_csv(Path("../Data/data_processed_cl.csv"), index_col=0)
+data.shape 
+#reduced dataset: (4512, 1320)
+#cleaned dataset: (4511, 1847)
+y = data["BIKESTYLE"]
+y_2 = data["category"]
+X = data.drop(columns=["BIKESTYLE", "category"])
+
+#%%
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+
+
+# Create the correlation matrix, using the absolute values.
+# For our purpose, it doesn't matter whether the correlation is positive or negative.
+corrMatrix = X_train.corr().abs()
+
+# Plot a heatmap of the correlation matrix.
+fig, ax = plt.subplots(figsize=(18,18))
+sns.heatmap(corrMatrix, annot=True);
 
 
 #data_2 = remove_classes_with_less_than_x_percent(data)
@@ -57,7 +80,18 @@ def remove_classes_with_less_than_x_percent(data, label_col = "BIKESTYLE", perce
 #data_2.BIKESTYLE.head()
 
 # %%
+# Select the upper triangle of the correlation matrix.
+upper = corrMatrix.where(np.triu(np.ones(corrMatrix.shape), k=1).astype(bool))
+# Find the index of those feature columns with correlation greater than 0.95.
+to_drop = [column for column in upper.columns if any(upper[column] > 0.95)]
 
+# Drop the columns from the train set.
+X_train_selected = X_train.drop(columns=to_drop)
+
+# Drop the columns from the test set.
+X_test_selected = X_test.drop(columns=to_drop)
 
 
 # %%
+
+#save the new dataset
