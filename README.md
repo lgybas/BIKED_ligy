@@ -20,7 +20,7 @@ My changes (for 1.) are that I am
 Key results (for 1.) are:
 * Classification accuracy can be raised to above 75 % on the testset when using only numerical columns of the reduced.csv
 * The processed.csv data-set contains 555 columns of the OneHot-Encoded column "SIZE".
-* A presentation for a non-technical audience can be found [here](Final_Presentation - WBS Coding School.pdf)
+* A presentation for a non-technical audience can be found [here](https://github.com/lgybas/BIKED_ligy/blob/main/Final_Presentation%20-%20WBS%20Coding%20School.pdf)
 
 Have fun exploring!
 
